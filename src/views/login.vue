@@ -21,13 +21,14 @@
 </template>
 
 <script>
+import { userLogin } from '@/api/user.js'
 export default {
   // data是一个函数,返回一个对象
   data () {
     return {
       loginForm: {
-        username: '',
-        password: ''
+        username: 'admin',
+        password: '123456'
       },
       // 添加验证规则
       rules: {
@@ -49,7 +50,30 @@ export default {
       this.$refs.loginForm.validate((valid) => {
         if (valid) {
           // 验证通过,就去发起登录请求
-          console.log('ok')
+          userLogin(this.loginForm)
+            .then(result => {
+              if (result.data.meta.status === 200) {
+                // 登录成功
+                this.$message({
+                  message: result.data.meta.msg,
+                  type: 'success'
+                })
+                // 路由跳转
+                this.$router.push({ name: 'Home' })
+              } else {
+                // 登录失败
+                this.$message({
+                  message: result.data.meta.msg,
+                  type: 'error'
+                })
+              }
+            })
+            .catch(() => {
+              this.$message({
+                message: '服务器异常,请重试',
+                type: 'error'
+              })
+            })
         } else {
           // 给出用户提示
           this.$message({
@@ -73,7 +97,7 @@ export default {
   .project-name {
     width: 100%;
     // background-color: red;
-    font-size: 28px;
+    font-size: 38px;
     height: 100px;
     line-height: 300px;
     color: #fff;
@@ -98,6 +122,7 @@ export default {
       border: 10px solid #fff;
       box-shadow: 0 1px 5px #ccc;
       overflow: hidden;
+      bottom: 10px;
     }
     .login-btn {
       width: 100%;
