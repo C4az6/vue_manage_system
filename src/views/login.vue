@@ -5,11 +5,11 @@
       <img src="../assets/avatar2.jpg" alt class="avatar" />
       <el-form :model="loginForm" :rules="rules" ref="loginForm" class="demo-loginForm">
         <el-form-item prop="username">
-          <el-input v-model="loginForm.username" clearable placeholder="请输入用户名"></el-input>
+          <el-input v-model="loginForm.username" clearable placeholder="请输入用户名" prefix-icon="myicon myicon-user"></el-input>
         </el-form-item>
 
         <el-form-item prop="password">
-          <el-input v-model="loginForm.password" clearable placeholder="请输入密码"></el-input>
+          <el-input v-model="loginForm.password" clearable placeholder="请输入密码" prefix-icon="myicon myicon-key"></el-input>
         </el-form-item>
 
         <el-form-item>
