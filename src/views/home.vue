@@ -2,14 +2,15 @@
   <div class="home">
     <el-container>
       <el-aside width="200px">
+        <div class="logo"></div>
         <el-menu
           default-active="2"
           class="el-menu-vertical-demo"
-          @open="handleOpen"
-          @close="handleClose"
           background-color="#545c64"
           text-color="#fff"
           active-text-color="#ffd04b"
+          :unique-opened="true"
+          :router="true"
         >
           <!-- 用户管理 -->
           <el-submenu index="1">
@@ -88,9 +89,15 @@
           </el-submenu>
         </el-menu>
       </el-aside>
-
       <el-container>
-        <el-header>Header</el-header>
+        <el-header>
+          <span class="myicon myicon-menu toggle-btn"></span>
+          <h3 class="system-title">后台管理系统</h3>
+          <div class="welcome">
+            <span>你好：admin</span>&nbsp;&nbsp;&nbsp;&nbsp;
+            <a href="javascript:;">退出</a>
+          </div>
+        </el-header>
 
         <el-main>Main</el-main>
       </el-container>
@@ -99,8 +106,54 @@
 </template>
 
 <script>
-export default {}
+export default {
+  data () {
+    return {}
+  }
+}
 </script>
 
 <style lang="less" scoped>
+.home {
+  height: 100%;
+  .el-menu {
+    border: none;
+  }
+  .el-container {
+    height: 100%;
+  }
+  .el-aside {
+    background-color: #545c64;
+  }
+  .el-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #545c64;
+  }
+  .logo {
+    height: 60px;
+    background: url(../assets/logo.png);
+    background-size: cover;
+    background-color: #fff;
+  }
+  .toggle-btn {
+    padding: 0 15px;
+    margin-left: -20px;
+    font-size: 36px;
+    color: white;
+    cursor: pointer;
+    line-height: 60px;
+    &:hover {
+      background-color: #4292cf;
+    }
+  }
+  .system-title {
+    font-size: 28px;
+    color: white;
+  }
+  .welcome {
+    color: white;
+  }
+}
 </style>
