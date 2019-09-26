@@ -69,7 +69,7 @@ export default {
                   type: 'success'
                 })
                 // 路由跳转
-                this.$router.push({ name: 'Home' })
+                this.$router.push({ name: 'Welcome' })
               } else {
                 // 登录失败
                 this.$message({

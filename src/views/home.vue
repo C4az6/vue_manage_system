@@ -18,7 +18,7 @@
               <i class="el-icon-location"></i>
               <span>用户管理</span>
             </template>
-            <el-menu-item index="1-4-1">
+            <el-menu-item index="/home/welcome">
               <template slot="title">
                 <i class="el-icon-location"></i>
                 <span>用户列表</span>
@@ -99,7 +99,9 @@
           </div>
         </el-header>
 
-        <el-main>Main</el-main>
+        <el-main>
+          <router-view></router-view>
+        </el-main>
       </el-container>
     </el-container>
   </div>

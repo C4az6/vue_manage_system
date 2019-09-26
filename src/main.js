@@ -13,5 +13,9 @@ Vue.use(ElementUI)
 new Vue({
   // 注册路由
   router,
-  render: h => h(App)
+  render: h => h(App),
+  // 默认跳转登录页面
+  mounted () {
+    this.$router.push({ name: 'Login' })
+  }
 }).$mount('#app')
