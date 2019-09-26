@@ -5,11 +5,21 @@
       <img src="../assets/avatar2.jpg" alt class="avatar" />
       <el-form :model="loginForm" :rules="rules" ref="loginForm" class="demo-loginForm">
         <el-form-item prop="username">
-          <el-input v-model="loginForm.username" clearable placeholder="请输入用户名" prefix-icon="myicon myicon-user"></el-input>
+          <el-input
+            v-model="loginForm.username"
+            clearable
+            placeholder="请输入用户名"
+            prefix-icon="myicon myicon-user"
+          ></el-input>
         </el-form-item>
 
         <el-form-item prop="password">
-          <el-input v-model="loginForm.password" clearable placeholder="请输入密码" prefix-icon="myicon myicon-key"></el-input>
+          <el-input
+            v-model="loginForm.password"
+            clearable
+            placeholder="请输入密码"
+            prefix-icon="myicon myicon-key"
+          ></el-input>
         </el-form-item>
 
         <el-form-item>
@@ -47,7 +57,7 @@ export default {
       登录验证的时候，表单有一个validate函数,这个函数可以真正的实现表单元素的数据验证,
       这个验证与之前的rules规则对应，当验证完成之后，会返回一个值给回调函数，如果是true,说明验证通过，否则就不通过
       */
-      this.$refs.loginForm.validate((valid) => {
+      this.$refs.loginForm.validate(valid => {
         if (valid) {
           // 验证通过,就去发起登录请求
           userLogin(this.loginForm)
