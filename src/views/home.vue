@@ -18,7 +18,7 @@
               <i class="el-icon-location"></i>
               <span>用户管理</span>
             </template>
-            <el-menu-item index="/home/welcome">
+            <el-menu-item index="/home/user">
               <template slot="title">
                 <i class="el-icon-location"></i>
                 <span>用户列表</span>

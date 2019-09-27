@@ -68,6 +68,8 @@ export default {
                   message: result.data.meta.msg,
                   type: 'success'
                 })
+                // 将token值存入localStorage中
+                localStorage.setItem('user_token', result.data.data.token)
                 // 路由跳转
                 this.$router.push({ name: 'Welcome' })
               } else {
