@@ -2,7 +2,7 @@
   <div class="home">
     <el-container>
       <el-aside width="200px">
-        <div class="logo"></div>
+        <div class="logo">Vue.js</div>
         <el-menu
           default-active="2"
           class="el-menu-vertical-demo"
@@ -135,9 +135,15 @@ export default {
   }
   .logo {
     height: 60px;
-    background: url(../assets/logo.png);
-    background-size: cover;
-    background-color: #fff;
+    // background: url(../assets/logo.png);
+    // background-size: 50% 50%;
+    // background-repeat: no-repeat;
+    background-color: #545c64;
+    color: #fff;
+    font-size: 40px;
+    line-height: 60px;
+    text-align: center;
+
   }
   .toggle-btn {
     padding: 0 15px;

@@ -7,8 +7,9 @@ axios.interceptors.request.use(function (config) {
   // 在发送请求之前做些什么
   // 获取可能有token的数据，进行请求头的设置，格式Authorization:token
   var token = localStorage.getItem('user_token')
-  console.log('---拦截器---')
-  config.headers['Authorization'] = token
+  if (token) {
+    config.headers['Authorization'] = token
+  }
   return config
 }, function (error) {
   // 对请求错误做些什么
@@ -16,7 +17,6 @@ axios.interceptors.request.use(function (config) {
 })
 
 // 添加登录验证方法
-// 在vue中，暴露成员可以使用export
 export const userLogin = (data) => {
   // 返回promise以后在方法调用的时候进行then和catch
   return axios({
@@ -31,5 +31,62 @@ export const getUserList = (params) => {
   return axios({
     url: 'users',
     params: params
+  })
+}
+
+// 新增用户方法
+export const addUser = (data) => {
+  return axios({
+    url: 'users',
+    method: 'post',
+    data
+  })
+}
+
+// 编辑用户方法
+export const editUser = (data) => {
+  return axios({
+    url: `users/${data.id}`,
+    method: 'put',
+    data
+  })
+}
+
+// 删除用户方法
+export const deleteUser = (id) => {
+  return axios({
+    method: 'delete',
+    url: `users/${id}`
+  })
+}
+
+// 修改用户状态方法
+export const changeUserStatus = (uid, type) => {
+  return axios({
+    method: 'put',
+    url: `users/${uid}/state/${type}`
+  })
+}
+
+// 分配角色方法
+export const userRole = (id, rid) => {
+  return axios({
+    method: 'put',
+    url: `users/${id}/role`,
+    data: { rid }
+  })
+}
+
+// 查询用户信息(可以得到role_id)
+export const getUserInfo = (id) => {
+  return axios({
+    url: `users/${id}`
+  })
+}
+
+// 查询角色列表
+export const getRolesList = () => {
+  return axios({
+    url: 'roles'
   })
 }
