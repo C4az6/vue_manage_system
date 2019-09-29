@@ -6,6 +6,7 @@ import Home from '@/views/home.vue'
 import Welcome from '@/views/Welcome.vue'
 import User from '@/views/users/User.vue'
 import Rights from '@/views/rights/Rights.vue'
+import Roles from '@/views/rights/Roles.vue'
 Vue.use(VueRouter)
 
 // 创建路由模块
@@ -35,6 +36,11 @@ var router = new VueRouter({
         name: 'Rights',
         path: 'rights',
         component: Rights
+      },
+      {
+        name: 'Roles',
+        path: 'roles',
+        component: Roles
       }
     ]
   }
