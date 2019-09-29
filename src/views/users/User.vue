@@ -11,11 +11,12 @@
     <div style="margin-top: 15px;">
       <el-input
         placeholder="请输入内容"
-        v-model="input3"
+        v-model="userKey"
         class="input-with-select"
         style="width:300px;margin-right:15px;"
+        @keyup.enter.native="init"
       >
-        <el-button slot="append" icon="el-icon-search"></el-button>
+        <el-button slot="append" icon="el-icon-search" @click="init"></el-button>
       </el-input>
       <el-button type="success" plain @click="addDialogFormVisible = true">添加用户</el-button>
     </div>
@@ -204,7 +205,7 @@ export default {
       },
       // 添加用户弹框状态值
       addDialogFormVisible: false,
-      input3: '',
+      userKey: '',
       userList: [],
       // 当前页码
       pagenum: 1,
@@ -237,7 +238,6 @@ export default {
     },
     // 分配角色
     assignRoles (obj) {
-      console.log(obj)
       // 获取角色信息
       this.roleDialogFormVisible = true
       this.roleUserForm.username = obj.username
@@ -396,7 +396,8 @@ export default {
     init () {
       getUserListApi({
         pagesize: this.pagesize,
-        pagenum: this.pagenum
+        pagenum: this.pagenum,
+        query: this.userKey
       })
         .then(res => {
           this.userList = res.data.data.users
