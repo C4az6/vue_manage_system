@@ -117,13 +117,18 @@
           ></el-input>
         </el-form-item>
         <el-form-item label="角色列表">
-          <el-select v-model="value" placeholder="请选择">
-            <el-option v-for="item in options" :key="item.id" :value="item.roleName"></el-option>
+          <el-select v-model="roleUserForm.rid" placeholder="请选择" @change="roleChange">
+            <el-option
+              v-for="item in options"
+              :key="item.id"
+              :label="item.roleName"
+              :value="item.id"
+            ></el-option>
           </el-select>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="roleDialogFormVisible = false; value = null">取 消</el-button>
+        <el-button @click="roleDialogFormVisible = false">取 消</el-button>
         <el-button type="primary" @click="roleConfirm">确 定</el-button>
       </div>
     </el-dialog>
@@ -132,15 +137,15 @@
 
 <script>
 import {
-  getUserList,
-  addUser,
-  editUser,
-  deleteUser,
-  changeUserStatus,
-  userRole,
-  getUserInfo,
-  getRolesList
+  getUserListApi,
+  addUserApi,
+  editUserApi,
+  deleteUserApi,
+  changeUserStatusApi,
+  userRoleApi
 } from '@/api/user.js'
+
+import { getRolesListApi } from '@/api/roles.js'
 export default {
   data () {
     return {
@@ -152,7 +157,6 @@ export default {
         rid: ''
       },
       options: [],
-      value: '',
       //* ***************************************************************************** */
       // 编辑用户窗口
       editDialogFormVisible: false,
@@ -212,40 +216,37 @@ export default {
   methods: {
     // 分配角色对话框关闭
     hanldeRoleClose () {
-      this.value = null
       this.roleDialogFormVisible = false
     },
     // 分配角色确认按钮
     roleConfirm () {
-      userRole(this.roleUserForm.id, this.roleUserForm.rid).then(res => {
-        if (res.data.meta.status === 200) {
-          this.$message.success('分配角色成功！')
-          this.roleDialogFormVisible = false
-          // 清空value的值
-          this.value = null
-        }
-      })
+      if (this.roleUserForm.rid) {
+        userRoleApi(this.roleUserForm.id, this.roleUserForm.rid).then(res => {
+          if (res.data.meta.status === 200) {
+            this.$message.success('分配角色成功！')
+            this.roleDialogFormVisible = false
+            this.init()
+          }
+        })
+      } else {
+        this.$message({
+          type: 'warning',
+          message: '请先选择一个角色'
+        })
+      }
     },
     // 分配角色
     assignRoles (obj) {
+      console.log(obj)
       // 获取角色信息
-      getRolesList().then(res => {
-        this.options = res.data.data
-      })
       this.roleDialogFormVisible = true
       this.roleUserForm.username = obj.username
       this.roleUserForm.id = obj.id
-      getUserInfo(this.roleUserForm.id)
-        .then(res => {
-          if (res.data.meta.status === 200) {
-            this.roleUserForm.rid = res.data.data.rid
-          } else {
-            console.log(res.data.meta.msg)
-          }
-        })
-        .catch(error => {
-          console.log(error)
-        })
+      this.roleUserForm.rid = obj.rid
+    },
+    roleChange (value) {
+      // 下拉列表切换的时候给rid赋值
+      this.roleUserForm.rid = value
     },
     // 删除用户信息
     deleteUserInfo (obj) {
@@ -255,7 +256,7 @@ export default {
         type: 'wraning'
       })
         .then(() => {
-          deleteUser(obj.id)
+          deleteUserApi(obj.id)
             .then(res => {
               if (res.data.meta.status === 200) {
                 this.$message({
@@ -285,7 +286,7 @@ export default {
     editConfirm () {
       this.$refs.editUserForm.validate(valid => {
         if (valid) {
-          editUser(this.editUserForm)
+          editUserApi(this.editUserForm)
             .then(res => {
               if (res.data.meta.status === 200) {
                 this.$message({
@@ -326,7 +327,7 @@ export default {
     add () {
       this.$refs.addUserForm.validate(valid => {
         if (valid) {
-          addUser(this.addUserForm)
+          addUserApi(this.addUserForm)
             .then(res => {
               if (res.data.meta.status === 201) {
                 // 创建成功,提示信息
@@ -355,7 +356,7 @@ export default {
     handleEdit (scope) {},
     // 修改用户状态
     change (id, type) {
-      changeUserStatus(id, type)
+      changeUserStatusApi(id, type)
         .then(res => {
           if (res.data.meta.status === 200) {
             this.$message({
@@ -393,7 +394,7 @@ export default {
 
     // 请求用户数据的函数
     init () {
-      getUserList({
+      getUserListApi({
         pagesize: this.pagesize,
         pagenum: this.pagenum
       })
@@ -409,6 +410,9 @@ export default {
   },
   mounted () {
     this.init()
+    getRolesListApi().then(res => {
+      this.options = res.data.data
+    })
   }
 }
 </script>
