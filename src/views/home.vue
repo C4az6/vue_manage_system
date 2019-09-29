@@ -38,7 +38,7 @@
                 <span>角色权限</span>
               </template>
             </el-menu-item>
-            <el-menu-item index="2-4-2">
+            <el-menu-item index="/home/rights">
               <template slot="title">
                 <i class="el-icon-location"></i>
                 <span>权限列表</span>
