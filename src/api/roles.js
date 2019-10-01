@@ -51,3 +51,12 @@ export const deleteRolesRightsApi = (roleid, rightid) => {
     url: `roles/${roleid}/rights/${rightid}`
   })
 }
+
+// 分配角色权限
+export const grantRolesRightsApi = (roleid, rids) => {
+  return axios({
+    method: 'post',
+    url: `roles/${roleid}/rights`,
+    data: { rids }
+  })
+}

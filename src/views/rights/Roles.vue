@@ -20,7 +20,12 @@
             style="margin-bottom:10px;border-bottom:1px dashed #ccc"
           >
             <el-col :span="4">
-              <el-tag closable type="success" v-if="first.children.length!==0">{{first.authName}}</el-tag>
+              <el-tag
+                closable
+                type="success"
+                v-if="first.children.length!==0"
+                @close="deleteRight(scope.row, first.id)"
+              >{{first.authName}}</el-tag>
             </el-col>
             <el-col :span="20">
               <el-row
@@ -29,7 +34,12 @@
                 style="margin-bottom: 10px;"
               >
                 <el-col :span="4">
-                  <el-tag closable type="info" v-if="second.children.length !== 0">{{second.authName}}</el-tag>
+                  <el-tag
+                    closable
+                    type="info"
+                    v-if="second.children.length !== 0"
+                    @close="deleteRight(scope.row, second.id)"
+                  >{{second.authName}}</el-tag>
                 </el-col>
                 <el-col :span="20">
                   <el-tag
@@ -38,7 +48,7 @@
                     v-for="third in second.children"
                     :key="third.id"
                     style="margin: 0 5px 8px 5px;"
-                    @close = "deleteRight(scope.row, third.id)"
+                    @close="deleteRight(scope.row, third.id)"
                   >{{third.authName}}</el-tag>
                 </el-col>
               </el-row>
@@ -59,7 +69,7 @@
           </el-tooltip>
 
           <el-tooltip class="item" effect="dark" content="角色授权" placement="top">
-            <el-button type="success" icon="el-icon-share"></el-button>
+            <el-button type="success" icon="el-icon-share" @click="showGrantDialog(scope.row)"></el-button>
           </el-tooltip>
 
           <el-tooltip class="item" effect="dark" content="删除" placement="top">
@@ -100,6 +110,26 @@
         <el-button type="primary" @click="editRolesConfirm">确 定</el-button>
       </div>
     </el-dialog>
+
+    <!-- 分配角色权限对话框 -->
+    <el-dialog title="分配角色权限" :visible.sync="grantRolesRightsDialogFormVisible">
+      <div class="box">
+        <el-tree
+          :data="rightList"
+          show-checkbox
+          node-key="id"
+          :default-expanded-keys="[2, 3]"
+          :default-expanded-all="true"
+          :default-checked-keys="checkedArr"
+          :props="defaultProps"
+          ref='tree'
+        ></el-tree>
+      </div>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="grantRolesRightsDialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="grantSubmit">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -109,11 +139,28 @@ import {
   addRolesApi,
   deleteRolesApi,
   editRolesApi,
-  deleteRolesRightsApi
+  deleteRolesRightsApi,
+  grantRolesRightsApi
 } from '@/api/roles.js'
+
+import { getAllRightsApi } from '@/api/rights.js'
 export default {
   data () {
     return {
+      roleId: '',
+      // 当前角色权限id数组
+      checkedArr: [],
+      // 所有权限
+      rightList: [],
+      // 树形组件节点配置
+      defaultProps: {
+        // 找下一级数据
+        children: 'children',
+        // 设置用于展示的标签属性
+        label: 'authName'
+      },
+      // 分配角色权限对话框
+      grantRolesRightsDialogFormVisible: false,
       // 编辑角色表单数据
       editRolesForm: {
         roleName: '',
@@ -142,6 +189,67 @@ export default {
     }
   },
   methods: {
+    // 角色权限提交
+    grantSubmit () {
+      var arr = this.$refs.tree.getCheckedNodes()
+      // console.log(arr)
+      // 我们需要的是每个权限所对应的id，同时包含它们的父级id
+      // 1.遍历Arr，获取里面的两个值：id pid  遍历并且拼接我们需要的结果['109, 107, 102', '154, 107, 102']
+      // 它可以将回调函数的操作结果存储到map函数内部所创建的数组中，当遍历完之后再将其返回
+      var temp = arr.map(value => {
+        return value.id + ',' + value.pid
+      })
+      // console.log(temp)
+      // 由于数组才能去重,所以先转换成数组
+      var str = temp.join(',')
+      // console.log(str)
+      // console.log(str.split(','))
+      // 数组去重 new Set可以创建一个set对象，同时去重
+      var obj = new Set(str.split(','))
+      // console.log(obj)
+      // 最终需要一个去重了重复值的数组, ...可以将对象中的数据一个个展开
+      // console.log(typeof obj)
+      var final = [...obj]
+      // console.log(final)
+      // console.log(typeof final)
+      // console.log(final.join(','))
+      // 调用接口方法实现角色授权
+      grantRolesRightsApi(this.roleId, final.join(','))
+        .then(res => {
+          this.grantRolesRightsDialogFormVisible = false
+          console.log(res)
+        })
+    },
+    // 树形组件对话框
+    showGrantDialog (row) {
+      console.log('123')
+      this.roleId = row.id
+      this.grantRolesRightsDialogFormVisible = true
+      // 获取所有权限数据
+      getAllRightsApi('tree')
+        .then(res => {
+          this.rightList = res.data.data
+          // 获取当前角色所拥有的所有权限id
+          // 先将上一个角色的权限id数组清空
+          this.checkedArr.length = 0
+          row.children.forEach(first => {
+            if (first.children.length > 0) {
+              // 遍历第二级权限
+              first.children.forEach(second => {
+                if (second.children.length > 0) {
+                  // 遍历三级权限
+                  second.children.forEach(third => {
+                    this.checkedArr.push(third.id)
+                  })
+                }
+              })
+            }
+          })
+        })
+        .catch(error => {
+          console.log(error)
+        })
+    },
     // 删除角色权限
     deleteRight (row, rightid) {
       deleteRolesRightsApi(row.id, rightid)
@@ -267,4 +375,8 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.box {
+  height: 400px;
+  overflow: scroll;
+}
 </style>
