@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import { userLogin } from '@/api/user.js'
+import { userLoginApi } from '@/api/user.js'
 export default {
   // data是一个函数,返回一个对象
   data () {
@@ -60,7 +60,7 @@ export default {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           // 验证通过,就去发起登录请求
-          userLogin(this.loginForm)
+          userLoginApi(this.loginForm)
             .then(result => {
               if (result.data.meta.status === 200) {
                 // 登录成功

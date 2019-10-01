@@ -17,3 +17,20 @@ export const getRolesListApi = () => {
     url: 'roles'
   })
 }
+
+// 添加角色API
+export const addRolesApi = (data) => {
+  return axios({
+    method: 'post',
+    url: '/roles',
+    data
+  })
+}
+
+// 删除角色API
+export const deleteRolesApi = (id) => {
+  return axios({
+    method: 'delete',
+    url: `roles/${id}`
+  })
+}
