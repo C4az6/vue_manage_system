@@ -34,3 +34,20 @@ export const deleteRolesApi = (id) => {
     url: `roles/${id}`
   })
 }
+
+// 编辑角色API
+export const editRolesApi = (data) => {
+  return axios({
+    method: 'put',
+    url: `roles/${data.id}`,
+    data
+  })
+}
+
+// 删除角色指定权限
+export const deleteRolesRightsApi = (roleid, rightid) => {
+  return axios({
+    method: 'delete',
+    url: `roles/${roleid}/rights/${rightid}`
+  })
+}
