@@ -61,7 +61,6 @@ export default {
   mounted () {
     getLeftMenuApi()
       .then(res => {
-        console.log(res)
         const { msg, status } = res.data.meta
         status === 200 ? this.menuList = res.data.data : console.log(msg)
       }).catch(error => {
