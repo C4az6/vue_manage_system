@@ -30,9 +30,7 @@
             <el-col :span="20">
               <el-row
                 v-for="second in first.children"
-                :key="second.id"
-                style="margin-bottom: 10px;"
-              >
+                :key="second.id">
                 <el-col :span="4">
                   <el-tag
                     closable
@@ -118,11 +116,10 @@
           :data="rightList"
           show-checkbox
           node-key="id"
-          :default-expanded-keys="[2, 3]"
-          :default-expanded-all="true"
+          :default-expand-all="true"
           :default-checked-keys="checkedArr"
           :props="defaultProps"
-          ref='tree'
+          ref="tree"
         ></el-tree>
       </div>
       <div slot="footer" class="dialog-footer">
@@ -192,14 +189,14 @@ export default {
     // 角色权限提交
     grantSubmit () {
       var arr = this.$refs.tree.getCheckedNodes()
-      // console.log(arr)
+      console.log(arr)
       // 我们需要的是每个权限所对应的id，同时包含它们的父级id
       // 1.遍历Arr，获取里面的两个值：id pid  遍历并且拼接我们需要的结果['109, 107, 102', '154, 107, 102']
       // 它可以将回调函数的操作结果存储到map函数内部所创建的数组中，当遍历完之后再将其返回
       var temp = arr.map(value => {
         return value.id + ',' + value.pid
       })
-      // console.log(temp)
+      console.log(temp)
       // 由于数组才能去重,所以先转换成数组
       var str = temp.join(',')
       // console.log(str)
@@ -214,11 +211,10 @@ export default {
       // console.log(typeof final)
       // console.log(final.join(','))
       // 调用接口方法实现角色授权
-      grantRolesRightsApi(this.roleId, final.join(','))
-        .then(res => {
-          this.grantRolesRightsDialogFormVisible = false
-          console.log(res)
-        })
+      grantRolesRightsApi(this.roleId, final.join(',')).then(res => {
+        this.grantRolesRightsDialogFormVisible = false
+        console.log(res)
+      })
     },
     // 树形组件对话框
     showGrantDialog (row) {

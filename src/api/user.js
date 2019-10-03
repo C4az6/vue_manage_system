@@ -76,3 +76,10 @@ export const userRoleApi = (id, rid) => {
     data: { rid }
   })
 }
+
+// 获取左侧动态生成的菜单项
+export const getLeftMenuApi = () => {
+  return axios({
+    url: `menus`
+  })
+}

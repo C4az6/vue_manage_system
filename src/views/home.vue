@@ -13,77 +13,19 @@
           :router="true"
         >
           <!-- 用户管理 -->
-          <el-submenu index="1">
+          <el-submenu :index="item.id + ''" v-for="item in menuList" :key="item.id">
             <template slot="title">
               <i class="el-icon-location"></i>
-              <span>用户管理</span>
+              <span>{{item.authName}}</span>
             </template>
-            <el-menu-item index="/home/user">
+            <!-- 路由映射组件
+            映射就是指：让路由所对应的组件在指定router-view中展示
+            指定router-view：关注组件的嵌套结构
+             -->
+            <el-menu-item :index="'/home/'+subitem.path" v-for="subitem in item.children" :key="subitem.id">
               <template slot="title">
                 <i class="el-icon-location"></i>
-                <span>用户列表</span>
-              </template>
-            </el-menu-item>
-          </el-submenu>
-
-          <!-- 权限管理 -->
-          <el-submenu index="2">
-            <template slot="title">
-              <i class="el-icon-location"></i>
-              <span>权限管理</span>
-            </template>
-            <el-menu-item index="/home/roles">
-              <template slot="title">
-                <i class="el-icon-location"></i>
-                <span>角色列表</span>
-              </template>
-            </el-menu-item>
-            <el-menu-item index="/home/rights">
-              <template slot="title">
-                <i class="el-icon-location"></i>
-                <span>权限列表</span>
-              </template>
-            </el-menu-item>
-          </el-submenu>
-
-          <!-- 商品管理 -->
-          <el-submenu index="3">
-            <template slot="title">
-              <i class="el-icon-location"></i>
-              <span>商品管理</span>
-            </template>
-            <el-menu-item index="3-4-1">
-              <template slot="title">
-                <i class="el-icon-location"></i>
-                <span>用户列表</span>
-              </template>
-            </el-menu-item>
-          </el-submenu>
-
-          <!-- 订单管理 -->
-          <el-submenu index="4">
-            <template slot="title">
-              <i class="el-icon-location"></i>
-              <span>订单管理</span>
-            </template>
-            <el-menu-item index="4-4-1">
-              <template slot="title">
-                <i class="el-icon-location"></i>
-                <span>用户列表</span>
-              </template>
-            </el-menu-item>
-          </el-submenu>
-
-          <!-- 数据统计 -->
-          <el-submenu index="5">
-            <template slot="title">
-              <i class="el-icon-location"></i>
-              <span>数据统计</span>
-            </template>
-            <el-menu-item index="5-4-1">
-              <template slot="title">
-                <i class="el-icon-location"></i>
-                <span>用户列表</span>
+                <span>{{subitem.authName}}</span>
               </template>
             </el-menu-item>
           </el-submenu>
@@ -108,9 +50,23 @@
 </template>
 
 <script>
+import { getLeftMenuApi } from '@/api/user'
 export default {
   data () {
-    return {}
+    return {
+      // 左侧菜单项
+      menuList: []
+    }
+  },
+  mounted () {
+    getLeftMenuApi()
+      .then(res => {
+        console.log(res)
+        const { msg, status } = res.data.meta
+        status === 200 ? this.menuList = res.data.data : console.log(msg)
+      }).catch(error => {
+        console.log(error)
+      })
   }
 }
 </script>

@@ -29,7 +29,7 @@ var router = new VueRouter({
       },
       {
         name: 'User',
-        path: 'user',
+        path: 'users',
         component: User
       },
       {
