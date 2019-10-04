@@ -17,3 +17,20 @@ export const addGoodsApi = (data) => {
     data
   })
 }
+
+// 删除商品
+export const removeGoodsApi = (id) => {
+  return axios({
+    method: 'delete',
+    url: `goods/${id}`
+  })
+}
+
+// 编辑商品
+export const editGoodsApi = (data) => {
+  return axios({
+    method: 'put',
+    url: `goods/${data.id}`,
+    data
+  })
+}
