@@ -117,6 +117,7 @@ export default {
     editGoodsConfirm () {
       this.$refs.editGoodsForm.validate(valid => {
         if (valid) {
+          // 编辑功能有bug,无法更新数据,传入number类型提示id不是数字类型
           console.log(this.editGoodsForm.goods_id)
           console.log(typeof this.editGoodsForm.goods_id)
           // 验证通过就发送请求更新数据
