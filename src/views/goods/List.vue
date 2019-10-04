@@ -11,7 +11,7 @@
         >
           <el-button slot="append" icon="el-icon-search"></el-button>
         </el-input>
-        <el-button type="success" plain>添加商品</el-button>
+        <el-button type="success" plain @click="$router.push({name: 'Add'})">添加商品</el-button>
       </div>
 
       <!-- 表格数据 -->

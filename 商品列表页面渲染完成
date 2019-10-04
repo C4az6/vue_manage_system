@@ -1,0 +1,5 @@
+[master fdbe293] 商品管理
+ 8 files changed, 107 insertions(+), 71 deletions(-)
+ create mode 100644 src/api/goods.js
+ rewrite src/api/rights.js (80%)
+ copy src/{api/rights.js => utils/myaxios.js} (60%)
