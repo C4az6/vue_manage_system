@@ -8,3 +8,12 @@ export const getAllGoodsListApi = (obj) => {
     params: obj
   })
 }
+
+// 添加商品
+export const addGoodsApi = (data) => {
+  return axios({
+    url: 'goods',
+    method: 'post',
+    data
+  })
+}

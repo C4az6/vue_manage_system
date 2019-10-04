@@ -1,5 +1,11 @@
 <template>
   <div class="list">
+    <!-- 路径导航——面包屑 -->
+    <el-breadcrumb separator="/" style="line-height:45px;background-color:#fff">
+      <el-breadcrumb-item :to="{ path: '/home/welcome' }">首页</el-breadcrumb-item>
+      <el-breadcrumb-item>商品管理</el-breadcrumb-item>
+      <el-breadcrumb-item>商品列表</el-breadcrumb-item>
+    </el-breadcrumb>
     <el-card class="box-card">
       <!-- 搜索框和添加商品按钮 -->
       <div style="margin-top:15px">
@@ -15,11 +21,7 @@
       </div>
 
       <!-- 表格数据 -->
-      <el-table
-        :data="goodsList"
-        style="width: 100%;margin-top: 20px;"
-        border
-      >
+      <el-table :data="goodsList" style="width: 100%;margin-top: 20px;" border>
         <el-table-column type="index"></el-table-column>
         <el-table-column prop="goods_name" label="商品名称" width="580"></el-table-column>
         <el-table-column prop="goods_price" label="价格" width="180"></el-table-column>
@@ -32,6 +34,16 @@
           </template>
         </el-table-column>
       </el-table>
+
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="pagenum - 0"
+        :page-sizes="[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]"
+        :page-size="pagesize"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="total - 0"
+      ></el-pagination>
     </el-card>
   </div>
 </template>
@@ -41,13 +53,40 @@ import { getAllGoodsListApi } from '@/api/goods.js'
 export default {
   data () {
     return {
+      total: '',
       goodsList: [],
       userKey: '',
-      pagenum: 1,
-      pagesize: 10
+      pagenum: '1',
+      pagesize: 5
     }
   },
   methods: {
+    // 每页显示多少条数据改变时触发
+    handleSizeChange (value) {
+      this.pagesize = value
+      this.getGoodsList()
+    },
+    // 当前页码改变时触发
+    handleCurrentChange (value) {
+      this.pagenum = value
+      this.getGoodsList()
+    },
+    // 获取商品列表数据并分页
+    getGoodsList () {
+      getAllGoodsListApi({
+        query: this.userKey,
+        pagenum: this.pagenum,
+        pagesize: this.pagesize
+      })
+        .then(res => {
+          this.total = res.data.data.total
+          this.pagenum = res.data.data.pagenum
+          this.goodsList = res.data.data.goods
+        })
+        .catch(error => {
+          console.log(error)
+        })
+    },
     // 监听商品编辑按钮
     handleEdit (obj) {
       console.log(obj)
@@ -58,22 +97,10 @@ export default {
     }
   },
   mounted () {
-    getAllGoodsListApi({
-      query: this.userKey,
-      pagenum: this.pagenum,
-      pagesize: this.pagesize
-    })
-      .then(res => {
-        this.goodsList = res.data.data.goods
-      })
-      .catch(error => {
-        console.log(error)
-      })
+    this.getGoodsList()
   }
 }
 </script>
 
 <style lang="less" scoped>
-el-table {
-}
 </style>
