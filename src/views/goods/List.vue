@@ -27,7 +27,11 @@
         <el-table-column prop="goods_name" label="商品名称" width="580"></el-table-column>
         <el-table-column prop="goods_price" label="价格" width="180"></el-table-column>
         <el-table-column prop="goods_weight" label="商品重量"></el-table-column>
-        <el-table-column prop="add_time" label="创建时间"></el-table-column>
+        <el-table-column label="创建时间">
+          <template slot-scope="scope">
+            <span>{{scope.row.upd_time | formatDate}}</span>
+          </template>
+        </el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button size="mini" @click="handleEdit(scope.row)">编辑</el-button>
@@ -81,7 +85,14 @@ import {
   removeGoodsApi,
   editGoodsApi
 } from '@/api/goods.js'
+
+import { formatDateTime } from '@/common/date.js'
 export default {
+  filters: {
+    formatDate: time => {
+      return formatDateTime(time)
+    }
+  },
   data () {
     return {
       rules: {
@@ -130,7 +141,8 @@ export default {
               } else {
                 this.$message.error(msg)
               }
-            }).catch(error => {
+            })
+            .catch(error => {
               this.$message.error(error)
             })
         } else {
