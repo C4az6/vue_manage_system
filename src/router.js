@@ -10,6 +10,7 @@ import Roles from '@/views/rights/Roles.vue'
 import Goods from '@/views/goods/Goods.vue'
 import List from '@/views/goods/List.vue'
 import Add from '@/views/goods/Add.vue'
+import Edit from '@/views/goods/Edit.vue'
 Vue.use(VueRouter)
 
 // 创建路由模块
@@ -65,6 +66,11 @@ var router = new VueRouter({
               name: 'Add',
               path: 'add',
               component: Add
+            },
+            {
+              name: 'Edit',
+              path: 'edit',
+              component: Edit
             }
           ]
         }

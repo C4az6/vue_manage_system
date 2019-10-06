@@ -21,8 +21,12 @@
             <!-- 路由映射组件
             映射就是指：让路由所对应的组件在指定router-view中展示
             指定router-view：关注组件的嵌套结构
-             -->
-            <el-menu-item :index="'/home/'+subitem.path" v-for="subitem in item.children" :key="subitem.id">
+            -->
+            <el-menu-item
+              :index="'/home/'+subitem.path"
+              v-for="subitem in item.children"
+              :key="subitem.id"
+            >
               <template slot="title">
                 <i class="el-icon-location"></i>
                 <span>{{subitem.authName}}</span>
@@ -68,8 +72,9 @@ export default {
     getLeftMenuApi()
       .then(res => {
         const { msg, status } = res.data.meta
-        status === 200 ? this.menuList = res.data.data : console.log(msg)
-      }).catch(error => {
+        status === 200 ? (this.menuList = res.data.data) : console.log(msg)
+      })
+      .catch(error => {
         console.log(error)
       })
   }
@@ -104,7 +109,6 @@ export default {
     font-size: 40px;
     line-height: 60px;
     text-align: center;
-
   }
   .toggle-btn {
     padding: 0 15px;

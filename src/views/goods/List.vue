@@ -96,6 +96,9 @@ export default {
     }
   },
   methods: {
+    handleEdit (row) {
+      this.$router.push({ name: 'Edit', params: { row: row } })
+    },
     // 每页显示多少条数据改变时触发
     handleSizeChange (value) {
       this.pagesize = value
