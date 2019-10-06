@@ -14,58 +14,63 @@ Vue.use(VueRouter)
 
 // 创建路由模块
 var router = new VueRouter({
-  routes: [{
-    name: 'Login',
-    path: '/login',
-    component: Login
-  },
+  routes: [
+    {
+      name: 'default',
+      path: '/',
+      redirect: { name: 'Login' }
+    }, {
+      name: 'Login',
+      path: '/login',
+      component: Login
+    },
 
-  {
-    name: 'Home',
-    path: '/home',
-    component: Home,
-    children: [
-      {
-        name: 'Welcome',
-        path: 'welcome',
-        component: Welcome
-      },
-      {
-        name: 'User',
-        path: 'users',
-        component: User
-      },
-      {
-        name: 'Rights',
-        path: 'rights',
-        component: Rights
-      },
-      {
-        name: 'Roles',
-        path: 'roles',
-        component: Roles
-      },
-      {
-        name: 'Goods',
-        path: 'goods',
-        component: Goods,
-        redirect: { name: 'List' },
-        children: [
-          {
-            name: 'List',
-            path: 'list',
-            component: List
-          },
-          {
-            name: 'Add',
-            path: 'add',
-            component: Add
-          }
-        ]
-      }
+    {
+      name: 'Home',
+      path: '/home',
+      component: Home,
+      children: [
+        {
+          name: 'Welcome',
+          path: 'welcome',
+          component: Welcome
+        },
+        {
+          name: 'User',
+          path: 'users',
+          component: User
+        },
+        {
+          name: 'Rights',
+          path: 'rights',
+          component: Rights
+        },
+        {
+          name: 'Roles',
+          path: 'roles',
+          component: Roles
+        },
+        {
+          name: 'Goods',
+          path: 'goods',
+          component: Goods,
+          redirect: { name: 'List' },
+          children: [
+            {
+              name: 'List',
+              path: 'list',
+              component: List
+            },
+            {
+              name: 'Add',
+              path: 'add',
+              component: Add
+            }
+          ]
+        }
 
-    ]
-  }
+      ]
+    }
   ]
 })
 

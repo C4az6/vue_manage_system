@@ -50,31 +50,6 @@
         layout="total, sizes, prev, pager, next, jumper"
         :total="total - 0"
       ></el-pagination>
-
-      <!-- 编辑商品Dialog -->
-      <el-dialog title="编辑商品" :visible.sync="editGoodsDialogFormVisible">
-        <el-form :model="editGoodsForm" label-width="120px" ref="editGoodsForm" :rules="rules">
-          <el-form-item label="商品名称">
-            <el-input v-model="editGoodsForm.goods_name" autocomplete="off" disabled></el-input>
-          </el-form-item>
-
-          <el-form-item label="商品价格" prop="goods_price">
-            <el-input v-model="editGoodsForm.goods_price" autocomplete="off"></el-input>
-          </el-form-item>
-
-          <el-form-item label="商品数量" prop="goods_number">
-            <el-input v-model="editGoodsForm.goods_number" autocomplete="off"></el-input>
-          </el-form-item>
-
-          <el-form-item label="商品重量" prop="goods_weight">
-            <el-input v-model="editGoodsForm.goods_weight" autocomplete="off"></el-input>
-          </el-form-item>
-        </el-form>
-        <div slot="footer" class="dialog-footer">
-          <el-button @click="editGoodsDialogFormVisible = false">取 消</el-button>
-          <el-button type="primary" @click="editGoodsConfirm">确 定</el-button>
-        </div>
-      </el-dialog>
     </el-card>
   </div>
 </template>
@@ -82,8 +57,7 @@
 <script>
 import {
   getAllGoodsListApi,
-  removeGoodsApi,
-  editGoodsApi
+  removeGoodsApi
 } from '@/api/goods.js'
 
 import { formatDateTime } from '@/common/date.js'
@@ -114,8 +88,6 @@ export default {
         goods_price: '',
         goods_weight: ''
       },
-      // 编辑商品对话框显示状态
-      editGoodsDialogFormVisible: false,
       total: '',
       goodsList: [],
       userKey: '',
@@ -124,32 +96,6 @@ export default {
     }
   },
   methods: {
-    // 监听商品编辑确认按钮
-    editGoodsConfirm () {
-      this.$refs.editGoodsForm.validate(valid => {
-        if (valid) {
-          // 编辑功能有bug,无法更新数据,传入number类型提示id不是数字类型
-          console.log(this.editGoodsForm.goods_id)
-          console.log(typeof this.editGoodsForm.goods_id)
-          // 验证通过就发送请求更新数据
-          editGoodsApi(this.editGoodsForm)
-            .then(res => {
-              const { msg, status } = res.data.meta
-              if (status === 200) {
-                this.$message.success(msg)
-                this.editGoodsDialogFormVisible = false
-              } else {
-                this.$message.error(msg)
-              }
-            })
-            .catch(error => {
-              this.$message.error(error)
-            })
-        } else {
-          return false
-        }
-      })
-    },
     // 每页显示多少条数据改变时触发
     handleSizeChange (value) {
       this.pagesize = value
@@ -175,15 +121,6 @@ export default {
         .catch(error => {
           console.log(error)
         })
-    },
-    // 监听商品编辑按钮
-    handleEdit (obj) {
-      this.editGoodsDialogFormVisible = true
-      this.editGoodsForm.goods_id = obj.goods_id
-      this.editGoodsForm.goods_name = obj.goods_name
-      this.editGoodsForm.goods_price = obj.goods_price
-      this.editGoodsForm.goods_number = obj.goods_number
-      this.editGoodsForm.goods_weight = obj.goods_weight
     },
     // 监听商品删除按钮
     handleDelete (obj) {

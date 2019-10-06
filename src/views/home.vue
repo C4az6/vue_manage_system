@@ -37,7 +37,7 @@
           <h3 class="system-title">后台管理系统</h3>
           <div class="welcome">
             <span>你好：admin</span>&nbsp;&nbsp;&nbsp;&nbsp;
-            <a href="javascript:;">退出</a>
+            <a href="javascript:;" @click.prevent="loginout">退出</a>
           </div>
         </el-header>
 
@@ -56,6 +56,12 @@ export default {
     return {
       // 左侧菜单项
       menuList: []
+    }
+  },
+  methods: {
+    loginout () {
+      localStorage.removeItem('user_token')
+      this.$router.push({ name: 'Login' })
     }
   },
   mounted () {
