@@ -11,6 +11,7 @@ import Goods from '@/views/goods/Goods.vue'
 import List from '@/views/goods/List.vue'
 import Add from '@/views/goods/Add.vue'
 import Edit from '@/views/goods/Edit.vue'
+import Params from '@/views/goods/Params.vue'
 Vue.use(VueRouter)
 
 // 创建路由模块
@@ -73,6 +74,11 @@ var router = new VueRouter({
               component: Edit
             }
           ]
+        },
+        {
+          name: 'Params',
+          path: 'params',
+          component: Params
         }
 
       ]
